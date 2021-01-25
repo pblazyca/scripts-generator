@@ -7,12 +7,15 @@ public class Generator
 {
     public StringBuilder CodeBuilder { get; private set; }
 
+    protected GeneratorSettings Settings { get; set; }
+
     private int IndentLevel { get; set; }
-    private GeneratorSettings Settings { get; set; }
+
+    protected const char SPACE = ' ';
+    protected const char UNDERLINE = '_';
 
     private const char NEW_LINE = '\n';
     private const char TAB = '\t';
-    private const char SPACE = ' ';
 
     //TODO: To think - maybe better get Environment.NewLine
     private readonly string NewLine;
@@ -24,7 +27,7 @@ public class Generator
         Settings = settings;
     }
 
-    public void BeginBlock()
+    protected void BeginBlock()
     {
         WriteIndent();
         WriteChar('{');
@@ -32,7 +35,7 @@ public class Generator
         IndentLevel++;
     }
 
-    public void EndBlock()
+    protected void EndBlock()
     {
         IndentLevel--;
         WriteIndent();
@@ -40,23 +43,23 @@ public class Generator
         WriteEmptyLine();
     }
 
-    public void WrtieText(string content)
+    protected void WrtieText(string content)
     {
         CodeBuilder.Append(content);
     }
 
-    public void WriteTextLine(string content)
+    protected void WriteTextLine(string content)
     {
         WriteIndent();
         CodeBuilder.AppendLine(content);
     }
 
-    public void WriteEmptyLine()
+    protected void WriteEmptyLine()
     {
         WriteChar(NEW_LINE);
     }
 
-    public void WriteIndent()
+    protected void WriteIndent()
     {
         switch (Settings.IndentStyle)
         {
@@ -70,22 +73,22 @@ public class Generator
         }
     }
 
-    public void WriteSpace()
+    protected void WriteSpace()
     {
         WriteChar(SPACE);
     }
 
-    public void WriteSpace(int count)
+    protected void WriteSpace(int count)
     {
         WriteChar(SPACE, count);
     }
 
-    public void WriteTab()
+    protected void WriteTab()
     {
         WriteChar(TAB);
     }
 
-    public void WriteTab(int count)
+    protected void WriteTab(int count)
     {
         WriteChar(TAB, count);
     }

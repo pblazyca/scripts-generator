@@ -54,7 +54,7 @@ public class BasicGenerator : Generator
         EndBlock();
     }
 
-    public void BeginMethod(AccessModifiers accessModifier, Type methodReturnType, string methodName, List<Tuple<Type, string>> parametersCollection = null)
+    public void BeginMethod(AccessModifiers accessModifier, Type methodReturnType, string methodName, List<VariableStruct> parametersCollection = null)
     {
         string accessModifierLabel = GetAccessModifiersLabel(accessModifier);
         string methodReturnTypeLabel = GetReturnTypeLabel(methodReturnType);
@@ -63,10 +63,25 @@ public class BasicGenerator : Generator
 
         if (parametersCollection != null)
         {
-            //    for (int i = 0; i < implementedInterfaceNameCollection.Count; i++)
-            //    {
-            //        beginMethodLine += $", {implementedInterfaceNameCollection[i]}";
-            //    }
+            beginMethodLine += "(";
+
+            for (int i = 0; i < parametersCollection.Count; i++)
+            {
+                if (i != 0)
+                {
+                    beginMethodLine += " ";
+                }
+
+                string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);
+                beginMethodLine += $"{parametersTypeLabel} {parametersCollection[i].Name}";
+
+                if (i != parametersCollection.Count - 1)
+                {
+                    beginMethodLine += ",";
+                }
+            }
+
+            beginMethodLine += ")";
         }
         else
         {

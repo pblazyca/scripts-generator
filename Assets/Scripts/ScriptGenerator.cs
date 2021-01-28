@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ScriptGenerator : MonoBehaviour
@@ -29,6 +28,11 @@ public class ScriptGenerator : MonoBehaviour
 
         List<string> interfaces = new List<string>() { "IInterfaces", "IAwesomable" };
         generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
+
+        List<VariableStruct> parameters = new List<VariableStruct>() { new VariableStruct(typeof(int), "number"), new VariableStruct(typeof(string), "label") };
+        generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
+        generator.EndMethod();
+
         generator.EndClass();
 
         Debug.Log(generator.CodeBuilder.ToString());

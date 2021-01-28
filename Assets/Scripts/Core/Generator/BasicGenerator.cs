@@ -57,21 +57,31 @@ public class BasicGenerator : Generator
     public void BeginMethod(AccessModifiers accessModifier, Type methodReturnType, string methodName, List<Tuple<Type, string>> parametersCollection = null)
     {
         string accessModifierLabel = GetAccessModifiersLabel(accessModifier);
-        string methodReturnTypeLabel = methodReturnType.Name;
+        string methodReturnTypeLabel = GetReturnTypeLabel(methodReturnType);
 
         string beginMethodLine = $"{accessModifierLabel} {methodReturnTypeLabel} {methodName}";
 
-        //if (implementedInterfaceNameCollection != null)
-        //{
-        //    for (int i = 0; i < implementedInterfaceNameCollection.Count; i++)
-        //    {
-        //        beginMethodLine += $", {implementedInterfaceNameCollection[i]}";
-        //    }
-        //}
+        if (parametersCollection != null)
+        {
+            //    for (int i = 0; i < implementedInterfaceNameCollection.Count; i++)
+            //    {
+            //        beginMethodLine += $", {implementedInterfaceNameCollection[i]}";
+            //    }
+        }
+        else
+        {
+            beginMethodLine += "()";
+        }
 
         WriteEmptyLine();
         WriteTextLine(beginMethodLine);
         BeginBlock();
+    }
+
+    public void EndMethod()
+    {
+        WriteEmptyLine();
+        EndBlock();
     }
 
     private void InitBaseTypeDictionary()
@@ -103,5 +113,17 @@ public class BasicGenerator : Generator
         label = label.Replace(UNDERLINE, SPACE);
 
         return label;
+    }
+
+    private string GetReturnTypeLabel(Type returnType)
+    {
+        if (BaseTypeDictionary.ContainsKey(returnType) == true)
+        {
+            return BaseTypeDictionary[returnType];
+        }
+        else
+        {
+            return returnType.Name.ToString();
+        }
     }
 }

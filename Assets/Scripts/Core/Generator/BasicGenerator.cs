@@ -1,50 +1,53 @@
 using System;
 using System.CodeDom;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Microsoft.CSharp;
+
 public class BasicGenerator : Generator
 {
     private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new Dictionary<Type, string>();
+    private StringBuilder WriterBuilder { get; set; }
 
     public BasicGenerator(GeneratorSettings settings) : base(settings)
     {
+        WriterBuilder = new StringBuilder();
         InitBaseTypeDictionary();
     }
 
     public void WriteNamespaceBlock(List<string> namespaceCollection)
     {
-        string namespaceLine = string.Empty;
-
         for (int i = 0; i < namespaceCollection.Count; i++)
         {
-            namespaceLine = $"using {namespaceCollection[i]};";
-            WriteTextLine(namespaceLine);
+            WriterBuilder.AppendLine($"using {namespaceCollection[i]};");
         }
+
+        WrtieText(WriterBuilder.ToString());
+        WriterBuilder.Clear();
     }
 
     public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<string> implementedInterfaceNameCollection = null)
     {
         string accessModifierLabel = GetAccessModifiersLabel(accessModifier);
-        string beginClassLine = $"{accessModifierLabel} class {className}";
+        WriterBuilder.Append($"{accessModifierLabel} class {className}");
 
         if (baseClassName != null)
         {
-            beginClassLine += $" : {baseClassName}";
+            WriterBuilder.Append($" : {baseClassName}";);
         }
 
         if (implementedInterfaceNameCollection != null)
         {
             for (int i = 0; i < implementedInterfaceNameCollection.Count; i++)
             {
-                beginClassLine += $", {implementedInterfaceNameCollection[i]}";
+                WriterBuilder.Append($", {implementedInterfaceNameCollection[i]}");
             }
         }
 
         WriteEmptyLine();
-        WriteTextLine(beginClassLine);
+        WriteTextLine(WriterBuilder.ToString());
+        WriterBuilder.Clear();
         BeginBlock();
     }
 
@@ -59,37 +62,20 @@ public class BasicGenerator : Generator
         string accessModifierLabel = GetAccessModifiersLabel(accessModifier);
         string methodReturnTypeLabel = GetReturnTypeLabel(methodReturnType);
 
-        string beginMethodLine = $"{accessModifierLabel} {methodReturnTypeLabel} {methodName}";
+        WriterBuilder.Append($"{accessModifierLabel} {methodReturnTypeLabel} {methodName}");
 
         if (parametersCollection != null)
         {
-            beginMethodLine += "(";
-
-            for (int i = 0; i < parametersCollection.Count; i++)
-            {
-                if (i != 0)
-                {
-                    beginMethodLine += " ";
-                }
-
-                string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);
-                beginMethodLine += $"{parametersTypeLabel} {parametersCollection[i].Name}";
-
-                if (i != parametersCollection.Count - 1)
-                {
-                    beginMethodLine += ",";
-                }
-            }
-
-            beginMethodLine += ")";
+            WriteMethodParameters(parametersCollection);
         }
         else
         {
-            beginMethodLine += "()";
+            WriterBuilder.Append("()");
         }
 
         WriteEmptyLine();
-        WriteTextLine(beginMethodLine);
+        WriteTextLine(WriterBuilder.ToString());
+        WriterBuilder.Clear();
         BeginBlock();
     }
 
@@ -119,6 +105,29 @@ public class BasicGenerator : Generator
                 }
             }
         }
+    }
+
+    private void WriteMethodParameters(List<VariableStruct> parametersCollection)
+    {
+        WriterBuilder.Append('(');
+
+        for (int i = 0; i < parametersCollection.Count; i++)
+        {
+            if (i != 0)
+            {
+                WriterBuilder.Append(SPACE);
+            }
+
+            string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);
+            WriterBuilder.Append($"{parametersTypeLabel} {parametersCollection[i].Name}");
+
+            if (i != parametersCollection.Count - 1)
+            {
+                WriterBuilder.Append(',');
+            }
+        }
+
+        WriterBuilder.Append(')');
     }
 
     private string GetAccessModifiersLabel(AccessModifiers accessModifier)

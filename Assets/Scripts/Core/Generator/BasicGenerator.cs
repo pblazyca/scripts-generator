@@ -34,7 +34,7 @@ public class BasicGenerator : Generator
 
         if (baseClassName != null)
         {
-            WriterBuilder.Append($" : {baseClassName}";);
+            WriterBuilder.Append($" : {baseClassName}");
         }
 
         if (implementedInterfaceNameCollection != null)

@@ -1,40 +1,49 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ScriptsGenerator.Core;
+using ScriptsGenerator.Structures;
 
-public class ScriptGenerator : MonoBehaviour
+namespace ScriptsGenerator.Demo
 {
-    [field: SerializeField]
-    private GeneratorSettings Settings { get; set; }
-
-    protected virtual void Start()
+    public class ScriptGenerator : MonoBehaviour
     {
-        BasicGenerator generator = new BasicGenerator(Settings);
+        [field: SerializeField]
+        private GeneratorSettings Settings { get; set; }
 
-        //generator.WriteTextLine("nowy kawałek tekstu");
-        //generator.BeginBlock();
-        //generator.WriteTextLine("kawałek tekstu w bloku");
-        //generator.WriteEmptyLine();
-        //generator.EndBlock();
-        //generator.WriteEmptyLine();
-        //generator.WriteTextLine("tekst");
-        //generator.WrtieText("pierwszy tekst");
-        //generator.WrtieText(" drugi doklejony tekst");
-        //generator.WriteEmptyLine();
-        //generator.BeginBlock();
-        //generator.EndBlock();
+        protected virtual void Start()
+        {
+            BasicGenerator generator = new BasicGenerator(Settings);
 
-        List<string> namespaces = new List<string>() { "System", "System.Collections", "UnityEngine.UI" };
-        generator.WriteNamespaceBlock(namespaces);
+            //generator.WriteTextLine("nowy kawałek tekstu");
+            //generator.BeginBlock();
+            //generator.WriteTextLine("kawałek tekstu w bloku");
+            //generator.WriteEmptyLine();
+            //generator.EndBlock();
+            //generator.WriteEmptyLine();
+            //generator.WriteTextLine("tekst");
+            //generator.WrtieText("pierwszy tekst");
+            //generator.WrtieText(" drugi doklejony tekst");
+            //generator.WriteEmptyLine();
+            //generator.BeginBlock();
+            //generator.EndBlock();
 
-        List<string> interfaces = new List<string>() { "IInterfaces", "IAwesomable" };
-        generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
+            List<string> namespaces = new List<string>() { "System", "System.Collections", "UnityEngine.UI" };
+            generator.WriteNamespaceBlock(namespaces);
 
-        List<VariableStruct> parameters = new List<VariableStruct>() { new VariableStruct(typeof(int), "number"), new VariableStruct(typeof(string), "label") };
-        generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
-        generator.EndMethod();
+            List<string> interfaces = new List<string>() { "IInterfaces", "IAwesomable" };
+            generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
 
-        generator.EndClass();
+            List<VariableInfo> parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number"), new VariableInfo(typeof(string), "label") };
+            generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
+            generator.EndMethod();
 
-        Debug.Log(generator.CodeBuilder.ToString());
+            parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number") };
+            generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", parameters, PolymorphismKeyword.VIRTUAL);
+            generator.EndMethod();
+
+            generator.EndClass();
+
+            Debug.Log(generator.CodeBuilder.ToString());
+        }
     }
 }

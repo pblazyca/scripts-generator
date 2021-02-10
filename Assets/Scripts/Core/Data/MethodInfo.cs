@@ -11,14 +11,26 @@ namespace ScriptsGenerator.Structures
         public List<VariableInfo> ParametersCollection { get; private set; }
         public PolymorphismKeyword Keyword { get; private set; }
 
+        public MethodInfo(AccessModifiers modifier, Type type, string name)
+        {
+            SetupMethodInfo(modifier, type, name, PolymorphismKeyword.NONE);
+        }
+
         public MethodInfo(AccessModifiers modifier, Type type, string name, PolymorphismKeyword keyword)
         {
             SetupMethodInfo(modifier, type, name, keyword);
         }
 
+        public MethodInfo(AccessModifiers modifier, Type type, string name, List<VariableInfo> parametersCollection)
+        {
+            SetupMethodInfo(modifier, type, name, PolymorphismKeyword.NONE);
+            SetupMethodParameters(parametersCollection);
+        }
+
         public MethodInfo(AccessModifiers modifier, Type type, string name, PolymorphismKeyword keyword, List<VariableInfo> parametersCollection)
         {
             SetupMethodInfo(modifier, type, name, keyword);
+            SetupMethodParameters(parametersCollection);
         }
 
         private void SetupMethodInfo(AccessModifiers modifier, Type type, string name, PolymorphismKeyword keyword)

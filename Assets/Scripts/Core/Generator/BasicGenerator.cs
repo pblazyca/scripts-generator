@@ -60,20 +60,24 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
-        public void BeginMethod(AccessModifiers accessModifier, Type methodReturnType, string methodName, List<VariableInfo> parametersCollection = null, PolymorphismKeyword? methodKeyword = null)
+        public void BeginMethod(ScriptsGenerator.Structures.MethodInfo methodInfo)
         {
-            WriterBuilder.Append($"{MakeLabelFromEnum(accessModifier)} ");
+            WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Modifier)} ");
 
-            if (methodKeyword != null)
+            if (methodInfo.Keyword != PolymorphismKeyword.NONE)
             {
-                //WriterBuilder.Append($"{GetEnumAsLabel(methodKeyword)} ");
+                WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Keyword)} ");
             }
 
-            WriterBuilder.Append($"{GetReturnTypeLabel(methodReturnType)} ");
-            WriterBuilder.Append(methodName);
+            WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
+            WriterBuilder.Append(methodInfo.Name);
 
-            WriteMethod(parametersCollection);
-            BeginBlock();
+            WriteMethod(methodInfo);
+
+            if (methodInfo.Keyword != PolymorphismKeyword.ABSTRACT)
+            {
+                BeginBlock();
+            }
         }
 
         public void EndMethod()
@@ -104,15 +108,20 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        private void WriteMethod(List<VariableInfo> parametersCollection = null)
+        private void WriteMethod(ScriptsGenerator.Structures.MethodInfo methodInfo)
         {
-            if (parametersCollection != null)
+            if (methodInfo.ParametersCollection != null)
             {
-                WriteMethodParameters(parametersCollection);
+                WriteMethodParameters(methodInfo.ParametersCollection);
             }
             else
             {
                 WriterBuilder.Append("()");
+            }
+
+            if (methodInfo.Keyword == PolymorphismKeyword.ABSTRACT)
+            {
+                WriterBuilder.Append(';');
             }
 
             WriteEmptyLine();

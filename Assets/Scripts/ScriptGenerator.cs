@@ -34,12 +34,15 @@ namespace ScriptsGenerator.Demo
             generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
 
             List<VariableInfo> parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number"), new VariableInfo(typeof(string), "label") };
-            generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
+            MethodInfo methodInfo = new MethodInfo(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
+
+            generator.BeginMethod(methodInfo);
             generator.EndMethod();
 
             parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number") };
-            generator.BeginMethod(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", parameters, PolymorphismKeyword.VIRTUAL);
-            generator.EndMethod();
+            methodInfo = new MethodInfo(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", PolymorphismKeyword.ABSTRACT, parameters);
+
+            generator.BeginMethod(methodInfo);
 
             generator.EndClass();
 

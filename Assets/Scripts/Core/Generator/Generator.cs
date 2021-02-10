@@ -3,103 +3,102 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-public class Generator
+namespace ScriptsGenerator.Core
 {
-    public StringBuilder CodeBuilder { get; private set; }
-
-    protected GeneratorSettings Settings { get; set; }
-
-    private int IndentLevel { get; set; }
-
-    protected const char SPACE = ' ';
-    protected const char UNDERLINE = '_';
-
-    private const char NEW_LINE = '\n';
-    private const char TAB = '\t';
-
-    //TODO: To think - maybe better get Environment.NewLine
-    private readonly string NewLine;
-
-    public Generator(GeneratorSettings settings)
+    public class Generator
     {
-        CodeBuilder = new StringBuilder();
-        NewLine = Environment.NewLine;
-        Settings = settings;
-    }
+        public StringBuilder CodeBuilder { get; private set; }
 
-    protected void BeginBlock()
-    {
-        WriteIndent();
-        WriteChar('{');
-        WriteEmptyLine();
-        IndentLevel++;
-    }
+        protected GeneratorSettings Settings { get; set; }
 
-    protected void EndBlock()
-    {
-        IndentLevel--;
-        WriteIndent();
-        WriteChar('}');
-        WriteEmptyLine();
-    }
+        private int IndentLevel { get; set; }
 
-    protected void WrtieText(string content)
-    {
-        CodeBuilder.Append(content);
-    }
+        protected const char SPACE = ' ';
+        protected const char UNDERLINE = '_';
 
-    protected void WriteTextLine(string content)
-    {
-        WriteIndent();
-        CodeBuilder.AppendLine(content);
-    }
+        private const char NEW_LINE = '\n';
+        private const char TAB = '\t';
 
-    protected void WriteEmptyLine()
-    {
-        WriteChar(NEW_LINE);
-    }
-
-    protected void WriteIndent()
-    {
-        switch (Settings.IndentStyle)
+        public Generator(GeneratorSettings settings)
         {
-            case IndentStyle.TAB:
-                WriteTab(IndentLevel);
-                break;
-
-            case IndentStyle.SPACE:
-                WriteSpace(IndentLevel);
-                break;
+            CodeBuilder = new StringBuilder();
+            Settings = settings;
         }
-    }
 
-    protected void WriteSpace()
-    {
-        WriteChar(SPACE);
-    }
+        protected void BeginBlock()
+        {
+            WriteIndent();
+            WriteChar('{');
+            WriteEmptyLine();
+            IndentLevel++;
+        }
 
-    protected void WriteSpace(int count)
-    {
-        WriteChar(SPACE, count);
-    }
+        protected void EndBlock()
+        {
+            IndentLevel--;
+            WriteIndent();
+            WriteChar('}');
+            WriteEmptyLine();
+        }
 
-    protected void WriteTab()
-    {
-        WriteChar(TAB);
-    }
+        protected void WrtieText(string content)
+        {
+            CodeBuilder.Append(content);
+        }
 
-    protected void WriteTab(int count)
-    {
-        WriteChar(TAB, count);
-    }
+        protected void WriteTextLine(string content)
+        {
+            WriteIndent();
+            CodeBuilder.AppendLine(content);
+        }
 
-    private void WriteChar(char value)
-    {
-        CodeBuilder.Append(value);
-    }
+        protected void WriteEmptyLine()
+        {
+            WriteChar(NEW_LINE);
+        }
 
-    private void WriteChar(char value, int count)
-    {
-        CodeBuilder.Append(value, count);
+        protected void WriteIndent()
+        {
+            switch (Settings.IndentStyle)
+            {
+                case IndentStyle.TAB:
+                    WriteTab(IndentLevel);
+                    break;
+
+                case IndentStyle.SPACE:
+                    WriteSpace(IndentLevel);
+                    break;
+            }
+        }
+
+        protected void WriteSpace()
+        {
+            WriteChar(SPACE);
+        }
+
+        protected void WriteSpace(int count)
+        {
+            WriteChar(SPACE, count);
+        }
+
+        protected void WriteTab()
+        {
+            WriteChar(TAB);
+        }
+
+        protected void WriteTab(int count)
+        {
+            WriteChar(TAB, count);
+        }
+
+        private void WriteChar(char value)
+        {
+            CodeBuilder.Append(value);
+        }
+
+        private void WriteChar(char value, int count)
+        {
+            CodeBuilder.Append(value, count);
+        }
     }
 }

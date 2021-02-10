@@ -32,7 +32,7 @@ namespace ScriptsGenerator.Core
 
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<string> implementedInterfaceNameCollection = null)
         {
-            string accessModifierLabel = GetAccessModifiersLabel(accessModifier);
+            string accessModifierLabel = MakeLabelFromEnum(accessModifier);
             WriterBuilder.Append($"{accessModifierLabel} class {className}");
 
             if (baseClassName != null)
@@ -62,11 +62,11 @@ namespace ScriptsGenerator.Core
 
         public void BeginMethod(AccessModifiers accessModifier, Type methodReturnType, string methodName, List<VariableInfo> parametersCollection = null, PolymorphismKeyword? methodKeyword = null)
         {
-            WriterBuilder.Append($"{GetAccessModifiersLabel(accessModifier)} ");
+            WriterBuilder.Append($"{MakeLabelFromEnum(accessModifier)} ");
 
             if (methodKeyword != null)
             {
-                WriterBuilder.Append($"{GetPolymorphismKeywordLabel(methodKeyword)} ");
+                //WriterBuilder.Append($"{GetEnumAsLabel(methodKeyword)} ");
             }
 
             WriterBuilder.Append($"{GetReturnTypeLabel(methodReturnType)} ");
@@ -143,18 +143,9 @@ namespace ScriptsGenerator.Core
             WriterBuilder.Append(')');
         }
 
-        private string GetAccessModifiersLabel(AccessModifiers accessModifier)
+        private string MakeLabelFromEnum<T>(T toChange) where T : Enum
         {
-            string label = accessModifier.ToString();
-            label = label.ToLower();
-            label = label.Replace(UNDERLINE, SPACE);
-
-            return label;
-        }
-
-        private string GetPolymorphismKeywordLabel(PolymorphismKeyword? keyword)
-        {
-            string label = keyword.ToString();
+            string label = toChange.ToString();
             label = label.ToLower();
             label = label.Replace(UNDERLINE, SPACE);
 

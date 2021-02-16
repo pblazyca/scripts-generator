@@ -30,6 +30,18 @@ namespace ScriptsGenerator.Core
             WriterBuilder.Clear();
         }
 
+        public void WriteProperty(AccessModifiers accessModifier, List<VariableInfo> propertiesCollection)
+        {
+            string accessModifierLabel = MakeLabelFromEnum(accessModifier);
+
+            for (int i = 0; i < propertiesCollection.Count; i++)
+            {
+                WriteTextLine($"{accessModifierLabel} {GetReturnTypeLabel(propertiesCollection[i].Type)} {propertiesCollection[i].Name} {{ get; set; }}");
+            }
+
+            WriterBuilder.Clear();
+        }
+
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<string> implementedInterfaceNameCollection = null)
         {
             string accessModifierLabel = MakeLabelFromEnum(accessModifier);

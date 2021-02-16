@@ -6,6 +6,10 @@ using System.Text;
 using Microsoft.CSharp;
 using ScriptsGenerator.Structures;
 
+using PropertyInfo = ScriptsGenerator.Structures.PropertyInfo;
+using MethodInfo = ScriptsGenerator.Structures.MethodInfo;
+using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
+
 namespace ScriptsGenerator.Core
 {
     public class BasicGenerator : Generator
@@ -30,16 +34,46 @@ namespace ScriptsGenerator.Core
             WriterBuilder.Clear();
         }
 
-        public void WriteProperty(AccessModifiers accessModifier, List<VariableInfo> propertiesCollection)
+        public void WriteProperty(List<PropertyInfo> propertiesCollection)
         {
-            string accessModifierLabel = MakeLabelFromEnum(accessModifier);
-
             for (int i = 0; i < propertiesCollection.Count; i++)
             {
-                WriteTextLine($"{accessModifierLabel} {GetReturnTypeLabel(propertiesCollection[i].Type)} {propertiesCollection[i].Name} {{ get; set; }}");
-            }
+                VariableInfo variable = propertiesCollection[i].Variable;
+                string accessModifierLabel = MakeLabelFromEnum(propertiesCollection[i].Modifier);
 
-            WriterBuilder.Clear();
+                WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
+
+                if (string.IsNullOrEmpty(variable.DefaultValue) == false)
+                {
+                    WriterBuilder.Append($" = {variable.DefaultValue};");
+                }
+
+                WriteTextLine(WriterBuilder.ToString());
+                WriterBuilder.Clear();
+            }
+        }
+
+        public void WriteField(List<FieldInfo> fieldsCollection)
+        {
+            for (int i = 0; i < fieldsCollection.Count; i++)
+            {
+                VariableInfo variable = fieldsCollection[i].Variable;
+                string accessModifierLabel = MakeLabelFromEnum(fieldsCollection[i].Modifier);
+
+                WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
+
+                if (string.IsNullOrEmpty(variable.DefaultValue) == false)
+                {
+                    WriterBuilder.Append($" = {variable.DefaultValue};");
+                }
+                else
+                {
+                    WriterBuilder.Append(';');
+                }
+
+                WriteTextLine(WriterBuilder.ToString());
+                WriterBuilder.Clear();
+            }
         }
 
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<string> implementedInterfaceNameCollection = null)
@@ -120,7 +154,7 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        private void WriteMethod(ScriptsGenerator.Structures.MethodInfo methodInfo)
+        private void WriteMethod(MethodInfo methodInfo)
         {
             if (methodInfo.ParametersCollection != null)
             {

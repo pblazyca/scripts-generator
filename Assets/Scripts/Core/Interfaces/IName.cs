@@ -1,4 +1,7 @@
-public interface IName
+namespace ScriptsGenerator.Structures
 {
-    string Name { get; }
+    public interface IName
+    {
+        string Name { get; }
+    }
 }

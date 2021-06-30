@@ -76,7 +76,7 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<string> implementedInterfaceNameCollection = null)
+        public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<InterfaceInfo> implementedInterfaceNameCollection = null)
         {
             string accessModifierLabel = MakeLabelFromEnum(accessModifier);
             WriterBuilder.Append($"{accessModifierLabel} class {className}");
@@ -90,7 +90,7 @@ namespace ScriptsGenerator.Core
             {
                 for (int i = 0; i < implementedInterfaceNameCollection.Count; i++)
                 {
-                    WriterBuilder.Append($", {implementedInterfaceNameCollection[i]}");
+                    WriterBuilder.Append($", {implementedInterfaceNameCollection[i].Name}");
                 }
             }
 

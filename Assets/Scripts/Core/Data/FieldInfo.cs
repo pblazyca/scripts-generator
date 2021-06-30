@@ -1,16 +1,7 @@
-using System;
-
 namespace ScriptsGenerator.Structures
 {
-    public class FieldInfo
+    public class FieldInfo : InLineElementInfo
     {
-        public AccessModifiers Modifier { get; private set; }
-        public VariableInfo Variable { get; private set; }
-
-        public FieldInfo(AccessModifiers modifier, VariableInfo variable)
-        {
-            Modifier = modifier;
-            Variable = variable;
-        }
+        public FieldInfo(AccessModifiers modifier, VariableInfo variable) : base(modifier, variable) { }
     }
 }

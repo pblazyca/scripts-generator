@@ -209,14 +209,7 @@ namespace ScriptsGenerator.Core
 
         private string GetReturnTypeLabel(Type returnType)
         {
-            if (BaseTypeDictionary.ContainsKey(returnType) == true)
-            {
-                return BaseTypeDictionary[returnType];
-            }
-            else
-            {
-                return returnType.Name.ToString();
-            }
+            return BaseTypeDictionary.ContainsKey(returnType) == true ? BaseTypeDictionary[returnType] : returnType.Name.ToString();
         }
     }
 }

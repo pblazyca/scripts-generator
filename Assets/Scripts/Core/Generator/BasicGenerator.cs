@@ -106,7 +106,7 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
-        public void BeginMethod(ScriptsGenerator.Structures.MethodInfo methodInfo)
+        public void BeginMethod(MethodInfo methodInfo)
         {
             WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Modifier)} ");
 

@@ -2,7 +2,7 @@ using System;
 
 namespace ScriptsGenerator.Structures
 {
-    public class VariableInfo : ElementInfo
+    public class VariableInfo : TypeElementInfo
     {
         public string DefaultValue { get; private set; }
 

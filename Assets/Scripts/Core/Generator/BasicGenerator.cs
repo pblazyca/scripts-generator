@@ -23,11 +23,11 @@ namespace ScriptsGenerator.Core
             InitBaseTypeDictionary();
         }
 
-        public void WriteNamespaceBlock(List<string> namespaceCollection)
+        public void WriteNamespaceBlock(List<NamespaceInfo> namespaceCollection)
         {
             for (int i = 0; i < namespaceCollection.Count; i++)
             {
-                WriterBuilder.AppendLine($"using {namespaceCollection[i]};");
+                WriterBuilder.AppendLine($"using {namespaceCollection[i].Name};");
             }
 
             WrtieText(WriterBuilder.ToString());

@@ -2,7 +2,7 @@ using System;
 
 namespace ScriptsGenerator.Structures
 {
-    public class PolymorphismElementInfo : ElementInfo
+    public class PolymorphismElementInfo : TypeElementInfo
     {
         public AccessModifiers Modifier { get; private set; }
         public PolymorphismKeyword Keyword { get; private set; }

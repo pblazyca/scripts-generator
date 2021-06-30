@@ -1,14 +1,16 @@
 using System;
 
-public class ElementInfo : IName
+namespace ScriptsGenerator.Structures
 {
-    public Type Type { get; private set; }
-    public string Name { get; private set; }
-
-    public ElementInfo(Type type, string name)
+    public class ElementInfo : IName
     {
-        Type = type;
-        Name = name;
+        public Type Type { get; private set; }
+        public string Name { get; private set; }
+
+        public ElementInfo(Type type, string name)
+        {
+            Type = type;
+            Name = name;
+        }
     }
 }
-

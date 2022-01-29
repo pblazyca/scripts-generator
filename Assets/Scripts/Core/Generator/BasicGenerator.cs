@@ -20,7 +20,7 @@ namespace ScriptsGenerator.Core
         public BasicGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
-            InitBaseTypeDictionary();
+            PopulateBaseTypeDictionary();
         }
 
         public void WriteNamespaceBlock(List<NamespaceInfo> namespaceCollection)
@@ -132,7 +132,7 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
-        private void InitBaseTypeDictionary()
+        private void PopulateBaseTypeDictionary()
         {
             Assembly msCSharpLib = Assembly.GetAssembly(typeof(int));
 

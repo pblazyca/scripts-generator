@@ -5,7 +5,7 @@ using ScriptsGenerator.Structures;
 
 namespace ScriptsGenerator.Demo
 {
-    public class ScriptGenerator : MonoBehaviour
+    public class ScriptGeneratorExample : MonoBehaviour
     {
         [field: SerializeField]
         private GeneratorSettings Settings { get; set; }

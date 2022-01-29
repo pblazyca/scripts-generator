@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ScriptsGenerator.Core
 {
-    public class Generator
+    public class BaseGenerator
     {
         public StringBuilder CodeBuilder { get; private set; }
 
@@ -19,7 +19,7 @@ namespace ScriptsGenerator.Core
         private const char NEW_LINE = '\n';
         private const char TAB = '\t';
 
-        public Generator(GeneratorSettings settings)
+        public BaseGenerator(GeneratorSettings settings)
         {
             CodeBuilder = new StringBuilder();
             Settings = settings;

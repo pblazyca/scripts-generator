@@ -34,6 +34,21 @@ namespace ScriptsGenerator.Core
             WriterBuilder.Clear();
         }
 
+        public void BeginNamespace(NamespaceInfo namespaceInfo)
+        {
+            WriterBuilder.AppendLine($"namespace {namespaceInfo.Name}");
+
+            WrtieText(WriterBuilder.ToString());
+            WriterBuilder.Clear();
+            BeginBlock();
+        }
+
+        public void EndNamespace()
+        {
+            WriteEmptyLine();
+            EndBlock();
+        }
+
         public void WriteProperty(List<PropertyInfo> propertiesCollection)
         {
             for (int i = 0; i < propertiesCollection.Count; i++)

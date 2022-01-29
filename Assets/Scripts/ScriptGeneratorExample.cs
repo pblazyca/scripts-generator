@@ -30,6 +30,9 @@ namespace ScriptsGenerator.Demo
             List<UsingInfo> usings = new List<UsingInfo>() { new UsingInfo("System"), new UsingInfo("System.Collections"), new UsingInfo("UnityEngine.UI") };
             generator.WriteUsing(usings);
 
+            NamespaceInfo namespaceInfo = new("Awesome.Inc");
+            generator.BeginNamespace(namespaceInfo);
+
             List<InterfaceInfo> interfaces = new List<InterfaceInfo>() { new InterfaceInfo("IInterfaces"), new InterfaceInfo("IAwesomable") };
             generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
 
@@ -51,6 +54,7 @@ namespace ScriptsGenerator.Demo
             generator.BeginMethod(methodInfo);
 
             generator.EndClass();
+            generator.EndNamespace();
 
             Debug.Log(generator.CodeBuilder.ToString());
         }

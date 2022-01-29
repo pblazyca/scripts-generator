@@ -23,7 +23,7 @@ namespace ScriptsGenerator.Core
             PopulateBaseTypeDictionary();
         }
 
-        public void WriteUsing(List<NamespaceInfo> namespaceCollection)
+        public void WriteUsing(List<UsingInfo> namespaceCollection)
         {
             for (int i = 0; i < namespaceCollection.Count; i++)
             {

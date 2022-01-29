@@ -27,8 +27,8 @@ namespace ScriptsGenerator.Demo
             //generator.BeginBlock();
             //generator.EndBlock();
 
-            List<NamespaceInfo> namespaces = new List<NamespaceInfo>() { new NamespaceInfo("System"), new NamespaceInfo("System.Collections"), new NamespaceInfo("UnityEngine.UI") };
-            generator.WriteUsing(namespaces);
+            List<UsingInfo> usings = new List<UsingInfo>() { new UsingInfo("System"), new UsingInfo("System.Collections"), new UsingInfo("UnityEngine.UI") };
+            generator.WriteUsing(usings);
 
             List<InterfaceInfo> interfaces = new List<InterfaceInfo>() { new InterfaceInfo("IInterfaces"), new InterfaceInfo("IAwesomable") };
             generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);

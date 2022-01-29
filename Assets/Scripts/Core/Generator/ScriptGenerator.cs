@@ -117,7 +117,6 @@ namespace ScriptsGenerator.Core
 
         public void EndClass()
         {
-            WriteEmptyLine();
             EndBlock();
         }
 

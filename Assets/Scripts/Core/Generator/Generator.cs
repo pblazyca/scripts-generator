@@ -25,37 +25,37 @@ namespace ScriptsGenerator.Core
             Settings = settings;
         }
 
-        protected void BeginBlock()
+        public void BeginBlock()
         {
             WriteIndent();
             WriteChar('{');
             IndentLevel++;
         }
 
-        protected void EndBlock()
+        public void EndBlock()
         {
             IndentLevel--;
             WriteIndent();
             WriteChar('}');
         }
 
-        protected void WriteText(string content)
+        public void WriteText(string content)
         {
             CodeBuilder.Append(content);
         }
 
-        protected void WriteTextLine(string content)
+        public void WriteTextLine(string content)
         {
             WriteIndent();
             CodeBuilder.AppendLine(content);
         }
 
-        protected void WriteEmptyLine()
+        public void WriteEmptyLine()
         {
             WriteChar(NEW_LINE);
         }
 
-        protected void WriteIndent()
+        public void WriteIndent()
         {
             switch (Settings.IndentStyle)
             {
@@ -69,22 +69,22 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        protected void WriteSpace()
+        public void WriteSpace()
         {
             WriteChar(SPACE);
         }
 
-        protected void WriteSpace(int count)
+        public void WriteSpace(int count)
         {
             WriteChar(SPACE, count);
         }
 
-        protected void WriteTab()
+        public void WriteTab()
         {
             WriteChar(TAB);
         }
 
-        protected void WriteTab(int count)
+        public void WriteTab(int count)
         {
             WriteChar(TAB, count);
         }

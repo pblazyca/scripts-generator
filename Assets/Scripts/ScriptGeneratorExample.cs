@@ -43,7 +43,7 @@ namespace ScriptsGenerator.Demo
             methodInfo = new MethodInfo(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", PolymorphismKeyword.ABSTRACT, parameters);
 
             generator.WriteEmptyLine();
-            generator.BeginMethod(methodInfo);
+            generator.WriteAbstractMethod(methodInfo);
 
             generator.EndClass();
             generator.EndNamespace();

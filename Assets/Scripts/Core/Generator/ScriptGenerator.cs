@@ -121,24 +121,15 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
+        public void WriteAbstractMethod(MethodInfo methodInfo)
+        {
+            WriteMethod(methodInfo);
+        }
+
         public void BeginMethod(MethodInfo methodInfo)
         {
-            WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Modifier)} ");
-
-            if (methodInfo.Keyword != PolymorphismKeyword.NONE)
-            {
-                WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Keyword)} ");
-            }
-
-            WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
-            WriterBuilder.Append(methodInfo.Name);
-
             WriteMethod(methodInfo);
-
-            if (methodInfo.Keyword != PolymorphismKeyword.ABSTRACT)
-            {
-                BeginBlock();
-            }
+            BeginBlock();
         }
 
         public void EndMethod()
@@ -171,6 +162,16 @@ namespace ScriptsGenerator.Core
 
         private void WriteMethod(MethodInfo methodInfo)
         {
+            WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Modifier)} ");
+
+            if (methodInfo.Keyword != PolymorphismKeyword.NONE)
+            {
+                WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Keyword)} ");
+            }
+
+            WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
+            WriterBuilder.Append(methodInfo.Name);
+
             if (methodInfo.ParametersCollection != null)
             {
                 WriteMethodParameters(methodInfo.ParametersCollection);

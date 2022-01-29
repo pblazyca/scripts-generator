@@ -12,7 +12,7 @@ namespace ScriptsGenerator.Demo
 
         protected virtual void Start()
         {
-            BasicGenerator generator = new BasicGenerator(Settings);
+            Core.ScriptGenerator generator = new Core.ScriptGenerator(Settings);
 
             //generator.WriteTextLine("nowy kawałek tekstu");
             //generator.BeginBlock();

@@ -12,12 +12,12 @@ using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
 
 namespace ScriptsGenerator.Core
 {
-    public class BasicGenerator : Generator
+    public class ScriptGenerator : Generator
     {
         private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new Dictionary<Type, string>();
         private StringBuilder WriterBuilder { get; set; }
 
-        public BasicGenerator(GeneratorSettings settings) : base(settings)
+        public ScriptGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
             PopulateBaseTypeDictionary();

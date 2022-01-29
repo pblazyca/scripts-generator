@@ -29,7 +29,6 @@ namespace ScriptsGenerator.Core
         {
             WriteIndent();
             WriteChar('{');
-            WriteEmptyLine();
             IndentLevel++;
         }
 
@@ -38,7 +37,6 @@ namespace ScriptsGenerator.Core
             IndentLevel--;
             WriteIndent();
             WriteChar('}');
-            WriteEmptyLine();
         }
 
         protected void WriteText(string content)

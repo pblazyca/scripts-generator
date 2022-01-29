@@ -41,7 +41,7 @@ namespace ScriptsGenerator.Core
             WriteEmptyLine();
         }
 
-        protected void WrtieText(string content)
+        protected void WriteText(string content)
         {
             CodeBuilder.Append(content);
         }

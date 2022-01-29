@@ -30,7 +30,7 @@ namespace ScriptsGenerator.Core
                 WriterBuilder.AppendLine($"using {namespaceCollection[i].Name};");
             }
 
-            WrtieText(WriterBuilder.ToString());
+            WriteText(WriterBuilder.ToString());
             WriterBuilder.Clear();
         }
 
@@ -38,7 +38,7 @@ namespace ScriptsGenerator.Core
         {
             WriterBuilder.AppendLine($"namespace {namespaceInfo.Name}");
 
-            WrtieText(WriterBuilder.ToString());
+            WriteText(WriterBuilder.ToString());
             WriterBuilder.Clear();
             BeginBlock();
         }

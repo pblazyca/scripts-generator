@@ -9,6 +9,7 @@ using ScriptsGenerator.Structures;
 using PropertyInfo = ScriptsGenerator.Structures.PropertyInfo;
 using MethodInfo = ScriptsGenerator.Structures.MethodInfo;
 using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
+using ScriptsGenerator.Helpers;
 
 namespace ScriptsGenerator.Core
 {
@@ -190,7 +191,7 @@ namespace ScriptsGenerator.Core
             {
                 if (i != 0)
                 {
-                    WriterBuilder.Append(SPACE);
+                    WriterBuilder.Append(Constants.SPACE);
                 }
 
                 string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);

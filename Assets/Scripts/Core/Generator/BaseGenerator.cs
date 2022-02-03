@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using ScriptsGenerator.Helpers;
 
 namespace ScriptsGenerator.Core
 {
@@ -12,12 +13,6 @@ namespace ScriptsGenerator.Core
         protected GeneratorSettings Settings { get; set; }
 
         private int IndentLevel { get; set; }
-
-        protected const char SPACE = ' ';
-        protected const char UNDERLINE = '_';
-
-        private const char NEW_LINE = '\n';
-        private const char TAB = '\t';
 
         public BaseGenerator(GeneratorSettings settings)
         {
@@ -52,7 +47,7 @@ namespace ScriptsGenerator.Core
 
         public void WriteEmptyLine()
         {
-            WriteChar(NEW_LINE);
+            WriteChar(Constants.NEW_LINE);
         }
 
         public void WriteIndent()
@@ -71,22 +66,22 @@ namespace ScriptsGenerator.Core
 
         public void WriteSpace()
         {
-            WriteChar(SPACE);
+            WriteChar(Constants.SPACE);
         }
 
         public void WriteSpace(int count)
         {
-            WriteChar(SPACE, count);
+            WriteChar(Constants.SPACE, count);
         }
 
         public void WriteTab()
         {
-            WriteChar(TAB);
+            WriteChar(Constants.TAB);
         }
 
         public void WriteTab(int count)
         {
-            WriteChar(TAB, count);
+            WriteChar(Constants.TAB, count);
         }
 
         private void WriteChar(char value)

@@ -88,7 +88,7 @@ namespace ScriptsGenerator.Core
 
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<InterfaceInfo> implementedInterfaceNameCollection = null)
         {
-            string accessModifierLabel = MakeLabelFromEnum(accessModifier);
+            string accessModifierLabel = Converters.ConvertEnumToLabel(accessModifier);
             WriterBuilder.Append($"{accessModifierLabel} class {className}");
 
             if (baseClassName != null)
@@ -155,11 +155,11 @@ namespace ScriptsGenerator.Core
 
         private void WriteMethod(MethodInfo methodInfo)
         {
-            WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Modifier)} ");
+            WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Modifier)} ");
 
             if (methodInfo.Keyword != PolymorphismKeyword.NONE)
             {
-                WriterBuilder.Append($"{MakeLabelFromEnum(methodInfo.Keyword)} ");
+                WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Keyword)} ");
             }
 
             WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
@@ -220,7 +220,7 @@ namespace ScriptsGenerator.Core
         private void ExecuteWriteProperty(PropertyInfo property)
         {
             VariableInfo variable = property.Variable;
-            string accessModifierLabel = MakeLabelFromEnum(property.Modifier);
+            string accessModifierLabel = Converters.ConvertEnumToLabel(property.Modifier);
 
             WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
 
@@ -233,7 +233,7 @@ namespace ScriptsGenerator.Core
         private void ExecuteWriteField(FieldInfo field)
         {
             VariableInfo variable = field.Variable;
-            string accessModifierLabel = MakeLabelFromEnum(field.Modifier);
+            string accessModifierLabel = Converters.ConvertEnumToLabel(field.Modifier);
 
             WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
 
@@ -245,15 +245,6 @@ namespace ScriptsGenerator.Core
             {
                 WriterBuilder.Append(';');
             }
-        }
-
-        private string MakeLabelFromEnum<T>(T toChange) where T : Enum
-        {
-            string label = toChange.ToString();
-            label = label.ToLower();
-            label = label.Replace(UNDERLINE, SPACE);
-
-            return label;
         }
 
         private string GetReturnTypeLabel(Type returnType)

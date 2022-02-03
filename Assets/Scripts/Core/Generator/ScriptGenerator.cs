@@ -73,22 +73,16 @@ namespace ScriptsGenerator.Core
         {
             for (int i = 0; i < fieldsCollection.Count; i++)
             {
-                VariableInfo variable = fieldsCollection[i].Variable;
-                string accessModifierLabel = MakeLabelFromEnum(fieldsCollection[i].Modifier);
-
-                WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
-
-                if (string.IsNullOrEmpty(variable.DefaultValue) == false)
-                {
-                    WriterBuilder.Append($" = {variable.DefaultValue};");
-                }
-                else
-                {
-                    WriterBuilder.Append(';');
-                }
-
-                ExecuteWriter();
+                ExecuteWriteField(fieldsCollection[i]);
             }
+
+            ExecuteWriter();
+        }
+
+        public void WriteField(FieldInfo field)
+        {
+            ExecuteWriteField(field);
+            ExecuteWriter();
         }
 
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<InterfaceInfo> implementedInterfaceNameCollection = null)
@@ -217,6 +211,11 @@ namespace ScriptsGenerator.Core
             WriterBuilder.Clear();
         }
 
+        private void ExecuteWriteUsing(UsingInfo namespaceInfo)
+        {
+            WriterBuilder.AppendLine($"using {namespaceInfo.Name};");
+        }
+
         private void ExecuteWriteProperty(PropertyInfo property)
         {
             VariableInfo variable = property.Variable;
@@ -230,9 +229,21 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        private void ExecuteWriteUsing(UsingInfo namespaceInfo)
+        private void ExecuteWriteField(FieldInfo field)
         {
-            WriterBuilder.AppendLine($"using {namespaceInfo.Name};");
+            VariableInfo variable = field.Variable;
+            string accessModifierLabel = MakeLabelFromEnum(field.Modifier);
+
+            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
+
+            if (string.IsNullOrEmpty(variable.DefaultValue) == false)
+            {
+                WriterBuilder.Append($" = {variable.DefaultValue};");
+            }
+            else
+            {
+                WriterBuilder.Append(';');
+            }
         }
 
         private string MakeLabelFromEnum<T>(T toChange) where T : Enum

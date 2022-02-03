@@ -57,7 +57,7 @@ namespace ScriptsGenerator.Core
         public void WriteProperty(PropertyInfo property)
         {
             ExecuteWriteProperty(property);
-            ExecuteWriter();
+            ExecuteWriterLine();
         }
 
         public void WriteProperty(List<PropertyInfo> propertiesCollection)
@@ -65,9 +65,8 @@ namespace ScriptsGenerator.Core
             for (int i = 0; i < propertiesCollection.Count; i++)
             {
                 ExecuteWriteProperty(propertiesCollection[i]);
+                ExecuteWriterLine();
             }
-
-            ExecuteWriter();
         }
 
         public void WriteField(List<FieldInfo> fieldsCollection)
@@ -75,15 +74,14 @@ namespace ScriptsGenerator.Core
             for (int i = 0; i < fieldsCollection.Count; i++)
             {
                 ExecuteWriteField(fieldsCollection[i]);
+                ExecuteWriterLine();
             }
-
-            ExecuteWriter();
         }
 
         public void WriteField(FieldInfo field)
         {
             ExecuteWriteField(field);
-            ExecuteWriter();
+            ExecuteWriterLine();
         }
 
         public void BeginClass(AccessModifiers accessModifier, string className, string baseClassName = null, List<InterfaceInfo> implementedInterfaceNameCollection = null)
@@ -105,7 +103,7 @@ namespace ScriptsGenerator.Core
             }
 
             WriteEmptyLine();
-            ExecuteWriter();
+            ExecuteWriterLine();
             BeginBlock();
         }
 
@@ -180,7 +178,7 @@ namespace ScriptsGenerator.Core
             }
 
             WriteEmptyLine();
-            ExecuteWriter();
+            ExecuteWriterLine();
         }
 
         private void WriteMethodParameters(List<VariableInfo> parametersCollection)
@@ -209,6 +207,12 @@ namespace ScriptsGenerator.Core
         private void ExecuteWriter()
         {
             WriteText(WriterBuilder.ToString());
+            WriterBuilder.Clear();
+        }
+
+        private void ExecuteWriterLine()
+        {
+            WriteTextLine(WriterBuilder.ToString());
             WriterBuilder.Clear();
         }
 

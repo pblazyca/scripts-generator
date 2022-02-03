@@ -25,7 +25,7 @@ namespace ScriptsGenerator.Core
 
         public void WriteUsing(UsingInfo namespaceInfo)
         {
-            WriterBuilder.AppendLine($"using {namespaceInfo.Name};");
+            ExecuteWriteUsing(namespaceInfo);
             ExecuteWriter();
         }
 
@@ -33,7 +33,7 @@ namespace ScriptsGenerator.Core
         {
             for (int i = 0; i < namespaceCollection.Count; i++)
             {
-                WriterBuilder.AppendLine($"using {namespaceCollection[i].Name};");
+                ExecuteWriteUsing(namespaceCollection[i]);
             }
 
             ExecuteWriter();
@@ -53,22 +53,20 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
+        public void WriteProperty(PropertyInfo property)
+        {
+            ExecuteWriteProperty(property);
+            ExecuteWriter();
+        }
+
         public void WriteProperty(List<PropertyInfo> propertiesCollection)
         {
             for (int i = 0; i < propertiesCollection.Count; i++)
             {
-                VariableInfo variable = propertiesCollection[i].Variable;
-                string accessModifierLabel = MakeLabelFromEnum(propertiesCollection[i].Modifier);
-
-                WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
-
-                if (string.IsNullOrEmpty(variable.DefaultValue) == false)
-                {
-                    WriterBuilder.Append($" = {variable.DefaultValue};");
-                }
-
-                ExecuteWriter();
+                ExecuteWriteProperty(propertiesCollection[i]);
             }
+
+            ExecuteWriter();
         }
 
         public void WriteField(List<FieldInfo> fieldsCollection)
@@ -217,6 +215,24 @@ namespace ScriptsGenerator.Core
         {
             WriteText(WriterBuilder.ToString());
             WriterBuilder.Clear();
+        }
+
+        private void ExecuteWriteProperty(PropertyInfo property)
+        {
+            VariableInfo variable = property.Variable;
+            string accessModifierLabel = MakeLabelFromEnum(property.Modifier);
+
+            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
+
+            if (string.IsNullOrEmpty(variable.DefaultValue) == false)
+            {
+                WriterBuilder.Append($" = {variable.DefaultValue};");
+            }
+        }
+
+        private void ExecuteWriteUsing(UsingInfo namespaceInfo)
+        {
+            WriterBuilder.AppendLine($"using {namespaceInfo.Name};");
         }
 
         private string MakeLabelFromEnum<T>(T toChange) where T : Enum

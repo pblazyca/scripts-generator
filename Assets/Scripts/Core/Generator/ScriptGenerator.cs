@@ -30,16 +30,14 @@ namespace ScriptsGenerator.Core
                 WriterBuilder.AppendLine($"using {namespaceCollection[i].Name};");
             }
 
-            WriteText(WriterBuilder.ToString());
-            WriterBuilder.Clear();
+            ExecuteWriter();
         }
 
         public void BeginNamespace(NamespaceInfo namespaceInfo)
         {
             WriterBuilder.AppendLine($"namespace {namespaceInfo.Name}");
 
-            WriteText(WriterBuilder.ToString());
-            WriterBuilder.Clear();
+            ExecuteWriter();
             BeginBlock();
         }
 
@@ -63,8 +61,7 @@ namespace ScriptsGenerator.Core
                     WriterBuilder.Append($" = {variable.DefaultValue};");
                 }
 
-                WriteTextLine(WriterBuilder.ToString());
-                WriterBuilder.Clear();
+                ExecuteWriter();
             }
         }
 
@@ -86,8 +83,7 @@ namespace ScriptsGenerator.Core
                     WriterBuilder.Append(';');
                 }
 
-                WriteTextLine(WriterBuilder.ToString());
-                WriterBuilder.Clear();
+                ExecuteWriter();
             }
         }
 
@@ -110,8 +106,7 @@ namespace ScriptsGenerator.Core
             }
 
             WriteEmptyLine();
-            WriteTextLine(WriterBuilder.ToString());
-            WriterBuilder.Clear();
+            ExecuteWriter();
             BeginBlock();
         }
 
@@ -186,8 +181,7 @@ namespace ScriptsGenerator.Core
             }
 
             WriteEmptyLine();
-            WriteTextLine(WriterBuilder.ToString());
-            WriterBuilder.Clear();
+            ExecuteWriter();
         }
 
         private void WriteMethodParameters(List<VariableInfo> parametersCollection)
@@ -211,6 +205,12 @@ namespace ScriptsGenerator.Core
             }
 
             WriterBuilder.Append(')');
+        }
+
+        private void ExecuteWriter()
+        {
+            WriteText(WriterBuilder.ToString());
+            WriterBuilder.Clear();
         }
 
         private string MakeLabelFromEnum<T>(T toChange) where T : Enum

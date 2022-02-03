@@ -23,6 +23,12 @@ namespace ScriptsGenerator.Core
             PopulateBaseTypeDictionary();
         }
 
+        public void WriteUsing(UsingInfo namespaceInfo)
+        {
+            WriterBuilder.AppendLine($"using {namespaceInfo.Name};");
+            ExecuteWriter();
+        }
+
         public void WriteUsing(List<UsingInfo> namespaceCollection)
         {
             for (int i = 0; i < namespaceCollection.Count; i++)

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using ScriptsGenerator.Helpers;
+using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
 {

@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.pbcoffee.code-happiness": {
+      "version": "https://github.com/pblazyca/code-happiness.git?path=/unity-code-happiness/Assets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ceb036458c1994b7da131ab37058224be2eee0bc"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 1,

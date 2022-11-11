@@ -4,8 +4,24 @@
       "version": "https://github.com/pblazyca/code-happiness.git?path=/unity-code-happiness/Assets",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "09b8dbdf3c17a95ce9d893d4e4f8c00efcd9e93e"
+      "dependencies": {
+        "com.unity.addressables": "1.19.19"
+      },
+      "hash": "541d82cc6ede8663d8707f6f916ef1ddb77c5d44"
+    },
+    "com.unity.addressables": {
+      "version": "1.20.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "1.19.6",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -17,6 +33,13 @@
     "com.unity.ide.vscode": {
       "version": "1.2.5",
       "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "1.20.1",
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

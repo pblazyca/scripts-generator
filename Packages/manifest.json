@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "com.pbcoffee.code-happiness": "https://github.com/pblazyca/code-happiness.git?path=/unity-code-happiness/Assets",
-    "com.unity.ide.vscode": "1.2.4",
-    "com.unity.test-framework": "1.1.29",
+    "com.unity.ide.vscode": "1.2.5",
+    "com.unity.test-framework": "1.1.33",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.ugui": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

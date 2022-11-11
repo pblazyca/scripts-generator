@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4acc7db32c1c7c881e88436addbe627eddbb66c2"
+      "hash": "09b8dbdf3c17a95ce9d893d4e4f8c00efcd9e93e"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -15,14 +15,14 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.33",
       "depth": 0,
       "source": "registry",
       "dependencies": {

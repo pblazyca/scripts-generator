@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ScriptsGenerator.Core;
 using ScriptsGenerator.Structures;
+using UnityEngine.UIElements;
 
 namespace ScriptsGenerator.Demo
 {
@@ -9,9 +9,12 @@ namespace ScriptsGenerator.Demo
     {
         [field: SerializeField]
         private GeneratorSettings Settings { get; set; }
+        [field: SerializeField]
+        private UIDocument MainUIDocument { get; set; }
 
         protected virtual void Start()
         {
+            Label output = MainUIDocument.rootVisualElement.Q<Label>("OutputLabel");
             Core.ScriptGenerator generator = new Core.ScriptGenerator(Settings);
 
             List<UsingInfo> usings = new List<UsingInfo>() { new UsingInfo("System"), new UsingInfo("System.Collections"), new UsingInfo("UnityEngine.UI") };
@@ -49,6 +52,7 @@ namespace ScriptsGenerator.Demo
             generator.EndNamespace();
 
             Debug.Log(generator.CodeBuilder.ToString());
+            output.text = generator.CodeBuilder.ToString();
         }
     }
 }

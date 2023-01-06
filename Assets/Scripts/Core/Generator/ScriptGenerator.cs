@@ -9,7 +9,7 @@ using ScriptsGenerator.Structures;
 using PropertyInfo = ScriptsGenerator.Structures.PropertyInfo;
 using MethodInfo = ScriptsGenerator.Structures.MethodInfo;
 using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
-using ScriptsGenerator.Helpers;
+using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
 {

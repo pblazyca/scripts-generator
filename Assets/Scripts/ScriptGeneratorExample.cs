@@ -26,38 +26,37 @@ namespace ScriptsGenerator.Demo
         {
             GenerateSampleClass();
             ShowGenerationResult();
-
         }
 
         private void GenerateSampleClass()
         {
-            List<UsingInfo> usings = new List<UsingInfo>() { new UsingInfo("System"), new UsingInfo("System.Collections"), new UsingInfo("UnityEngine.UI") };
+            List<UsingInfo> usings = new() { new("System"), new("System.Collections"), new("UnityEngine.UI") };
             Generator.WriteUsing(usings);
             Generator.WriteEmptyLine();
 
             NamespaceInfo namespaceInfo = new("Awesome.Inc");
             Generator.BeginNamespace(namespaceInfo);
 
-            List<InterfaceInfo> interfaces = new List<InterfaceInfo>() { new InterfaceInfo("IInterfaces"), new InterfaceInfo("IAwesomable") };
+            List<InterfaceInfo> interfaces = new() { new("IInterfaces"), new("IAwesomable") };
             Generator.BeginClass(AccessModifiers.PROTECTED_INTERNAL, "NewClass", "BaseGen", interfaces);
             Generator.WriteEmptyLine();
 
-            List<PropertyInfo> properties = new List<PropertyInfo>() { new PropertyInfo(AccessModifiers.PRIVATE, new VariableInfo(typeof(int), "a", "20")), new PropertyInfo(AccessModifiers.PROTECTED, new VariableInfo(typeof(int), "b", "52")), new PropertyInfo(AccessModifiers.PRIVATE, new VariableInfo(typeof(MethodInfo), "method")) };
+            List<PropertyInfo> properties = new() { new(AccessModifiers.PRIVATE, new(typeof(int), "a", "20")), new(AccessModifiers.PROTECTED, new(typeof(int), "b", "52")), new(AccessModifiers.PRIVATE, new(typeof(MethodInfo), "method")) };
             Generator.WriteProperty(properties);
             Generator.WriteEmptyLine();
 
-            List<FieldInfo> fields = new List<FieldInfo>() { new FieldInfo(AccessModifiers.PRIVATE, new VariableInfo(typeof(int), "a")), new FieldInfo(AccessModifiers.PROTECTED, new VariableInfo(typeof(int), "b", "0")), new FieldInfo(AccessModifiers.PRIVATE, new VariableInfo(typeof(MethodInfo), "method")) };
+            List<FieldInfo> fields = new() { new(AccessModifiers.PRIVATE, new(typeof(int), "a")), new(AccessModifiers.PROTECTED, new(typeof(int), "b", "0")), new(AccessModifiers.PRIVATE, new(typeof(MethodInfo), "method")) };
             Generator.WriteField(fields);
 
-            List<VariableInfo> parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number"), new VariableInfo(typeof(string), "label") };
-            MethodInfo methodInfo = new MethodInfo(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
+            List<VariableInfo> parameters = new() { new(typeof(int), "number"), new(typeof(string), "label") };
+            MethodInfo methodInfo = new(AccessModifiers.PRIVATE, typeof(void), "NewMethod", parameters);
 
             Generator.BeginMethod(methodInfo);
             Generator.WriteEmptyLine();
             Generator.EndMethod();
 
-            parameters = new List<VariableInfo>() { new VariableInfo(typeof(int), "number") };
-            methodInfo = new MethodInfo(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", PolymorphismKeyword.ABSTRACT, parameters);
+            parameters = new() { new(typeof(int), "number") };
+            methodInfo = new(AccessModifiers.PRIVATE, typeof(void), "NewVirtualMethod", PolymorphismKeyword.ABSTRACT, parameters);
 
             Generator.WriteEmptyLine();
             Generator.WriteAbstractMethod(methodInfo);

@@ -1,14 +1,7 @@
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
-using Microsoft.CSharp;
 using ScriptsGenerator.Structures;
-
-using PropertyInfo = ScriptsGenerator.Structures.PropertyInfo;
-using MethodInfo = ScriptsGenerator.Structures.MethodInfo;
-using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
 using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
@@ -21,6 +14,7 @@ namespace ScriptsGenerator.Core
         public ScriptGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
+            BaseTypeDictionary = GeneratorTools.PopulateBaseTypeDictionary();
         }
 
         public void WriteUsing(UsingInfo namespaceInfo)

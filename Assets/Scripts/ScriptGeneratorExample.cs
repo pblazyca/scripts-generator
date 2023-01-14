@@ -61,6 +61,12 @@ namespace ScriptsGenerator.Demo
             Generator.WriteEmptyLine();
             Generator.WriteAbstractMethod(methodInfo);
 
+            Generator.WriteEmptyLine();
+            Generator.BeginClass(AccessModifiers.PRIVATE, "NestedClass");
+            Generator.WriteEmptyLine();
+            Generator.EndClass();
+
+            Generator.WriteEmptyLine();
             Generator.EndClass();
             Generator.EndNamespace();
         }

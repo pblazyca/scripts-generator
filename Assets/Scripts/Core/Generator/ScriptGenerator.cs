@@ -160,7 +160,7 @@ namespace ScriptsGenerator.Core
                 WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Keyword)} ");
             }
 
-            WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
+            WriterBuilder.Append($"{GetTypeLabel(methodInfo.Type)} ");
             WriterBuilder.Append(methodInfo.Name);
 
             if (methodInfo.ParametersCollection != null)
@@ -192,7 +192,7 @@ namespace ScriptsGenerator.Core
                     WriterBuilder.Append(Constants.SPACE);
                 }
 
-                string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);
+                string parametersTypeLabel = GetTypeLabel(parametersCollection[i].Type);
                 WriterBuilder.Append($"{parametersTypeLabel} {parametersCollection[i].Name}");
 
                 if (i != parametersCollection.Count - 1)
@@ -226,7 +226,7 @@ namespace ScriptsGenerator.Core
             VariableInfo variable = property.Variable;
             string accessModifierLabel = Converters.ConvertEnumToLabel(property.Modifier);
 
-            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
+            WriterBuilder.Append($"{accessModifierLabel} {GetTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
 
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
@@ -239,7 +239,7 @@ namespace ScriptsGenerator.Core
             VariableInfo variable = field.Variable;
             string accessModifierLabel = Converters.ConvertEnumToLabel(field.Modifier);
 
-            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
+            WriterBuilder.Append($"{accessModifierLabel} {GetTypeLabel(variable.Type)} {variable.Name}");
 
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
@@ -251,9 +251,9 @@ namespace ScriptsGenerator.Core
             }
         }
 
-        private string GetReturnTypeLabel(Type returnType)
+        private string GetTypeLabel(Type type)
         {
-            return BaseTypeDictionary.ContainsKey(returnType) == true ? BaseTypeDictionary[returnType] : returnType.Name.ToString();
+            return BaseTypeDictionary.ContainsKey(type) == true ? BaseTypeDictionary[type] : type.Name.ToString();
         }
     }
 }

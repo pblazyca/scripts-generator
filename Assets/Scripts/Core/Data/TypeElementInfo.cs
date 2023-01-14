@@ -2,7 +2,7 @@ using System;
 
 namespace ScriptsGenerator.Structures
 {
-    public class TypeElementInfo : ElementInfo
+    public class TypeElementInfo : ElementInfo, IType
     {
         public Type Type { get; private set; }
 

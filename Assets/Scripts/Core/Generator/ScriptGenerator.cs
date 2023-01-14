@@ -15,13 +15,12 @@ namespace ScriptsGenerator.Core
 {
     public class ScriptGenerator : BaseGenerator
     {
-        private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new Dictionary<Type, string>();
+        private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new();
         private StringBuilder WriterBuilder { get; set; }
 
         public ScriptGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
-            PopulateBaseTypeDictionary();
         }
 
         public void WriteUsing(UsingInfo namespaceInfo)
@@ -127,28 +126,6 @@ namespace ScriptsGenerator.Core
         {
             WriteEmptyLine();
             EndBlock();
-        }
-
-        private void PopulateBaseTypeDictionary()
-        {
-            Assembly msCSharpLib = Assembly.GetAssembly(typeof(int));
-
-            using (CSharpCodeProvider csCodeProvider = new CSharpCodeProvider())
-            {
-                foreach (TypeInfo csType in msCSharpLib.DefinedTypes)
-                {
-                    if (string.Equals(csType.Namespace, "System"))
-                    {
-                        CodeTypeReference csTypeRef = new CodeTypeReference(csType);
-                        string csTypeName = csCodeProvider.GetTypeOutput(csTypeRef);
-
-                        if (csTypeName.IndexOf('.') == -1)
-                        {
-                            BaseTypeDictionary.Add(csType.AsType(), csTypeName);
-                        }
-                    }
-                }
-            }
         }
 
         private void WriteMethod(MethodInfo methodInfo)

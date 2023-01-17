@@ -1,6 +1,6 @@
 namespace ScriptsGenerator.Structures
 {
-    public class InLineElementInfo
+    public class InLineElementInfo : IStructureElement
     {
         public AccessModifiers Modifier { get; private set; }
         public VariableInfo Variable { get; private set; }

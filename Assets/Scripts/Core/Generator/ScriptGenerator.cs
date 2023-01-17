@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using ScriptsGenerator.Structures;
@@ -64,14 +63,14 @@ namespace ScriptsGenerator.Core
         {
             for (int i = 0; i < fieldsCollection.Count; i++)
             {
-                ExecuteWriteField(fieldsCollection[i]);
+                fieldsCollection[i].Write(WriterBuilder);
                 ExecuteWriterLine();
             }
         }
 
         public void WriteField(FieldInfo field)
         {
-            ExecuteWriteField(field);
+            field.Write(WriterBuilder);
             ExecuteWriterLine();
         }
 
@@ -200,23 +199,6 @@ namespace ScriptsGenerator.Core
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
                 WriterBuilder.Append($" = {variable.DefaultValue};");
-            }
-        }
-
-        private void ExecuteWriteField(FieldInfo field)
-        {
-            VariableInfo variable = field.Variable;
-            string accessModifierLabel = Converters.ConvertEnumToLabel(field.Modifier);
-
-            WriterBuilder.Append($"{accessModifierLabel} {GeneratorTools.GetTypeLabel(variable.Type)} {variable.Name}");
-
-            if (string.IsNullOrEmpty(variable.DefaultValue) == false)
-            {
-                WriterBuilder.Append($" = {variable.DefaultValue};");
-            }
-            else
-            {
-                WriterBuilder.Append(';');
             }
         }
     }

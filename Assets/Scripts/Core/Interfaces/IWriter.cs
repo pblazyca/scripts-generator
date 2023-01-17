@@ -3,7 +3,7 @@ using ScriptsGenerator.Structures;
 
 namespace ScriptsGenerator.Core
 {
-    public interface IWriter<T> where T : IStructureElement
+    public interface IWriter<T> where T : ElementInfo
     {
         void Write(T structureElement, ref StringBuilder writerBuilder);
     }

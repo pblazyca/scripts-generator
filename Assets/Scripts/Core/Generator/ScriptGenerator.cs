@@ -1,27 +1,17 @@
-using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
-using Microsoft.CSharp;
 using ScriptsGenerator.Structures;
-
-using PropertyInfo = ScriptsGenerator.Structures.PropertyInfo;
-using MethodInfo = ScriptsGenerator.Structures.MethodInfo;
-using FieldInfo = ScriptsGenerator.Structures.FieldInfo;
 using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
 {
     public class ScriptGenerator : BaseGenerator
     {
-        private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new Dictionary<Type, string>();
         private StringBuilder WriterBuilder { get; set; }
 
         public ScriptGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
-            PopulateBaseTypeDictionary();
         }
 
         public void WriteUsing(UsingInfo namespaceInfo)
@@ -73,14 +63,14 @@ namespace ScriptsGenerator.Core
         {
             for (int i = 0; i < fieldsCollection.Count; i++)
             {
-                ExecuteWriteField(fieldsCollection[i]);
+                fieldsCollection[i].Write(WriterBuilder);
                 ExecuteWriterLine();
             }
         }
 
         public void WriteField(FieldInfo field)
         {
-            ExecuteWriteField(field);
+            field.Write(WriterBuilder);
             ExecuteWriterLine();
         }
 
@@ -129,28 +119,6 @@ namespace ScriptsGenerator.Core
             EndBlock();
         }
 
-        private void PopulateBaseTypeDictionary()
-        {
-            Assembly msCSharpLib = Assembly.GetAssembly(typeof(int));
-
-            using (CSharpCodeProvider csCodeProvider = new CSharpCodeProvider())
-            {
-                foreach (TypeInfo csType in msCSharpLib.DefinedTypes)
-                {
-                    if (string.Equals(csType.Namespace, "System"))
-                    {
-                        CodeTypeReference csTypeRef = new CodeTypeReference(csType);
-                        string csTypeName = csCodeProvider.GetTypeOutput(csTypeRef);
-
-                        if (csTypeName.IndexOf('.') == -1)
-                        {
-                            BaseTypeDictionary.Add(csType.AsType(), csTypeName);
-                        }
-                    }
-                }
-            }
-        }
-
         private void WriteMethod(MethodInfo methodInfo)
         {
             WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Modifier)} ");
@@ -160,7 +128,7 @@ namespace ScriptsGenerator.Core
                 WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Keyword)} ");
             }
 
-            WriterBuilder.Append($"{GetReturnTypeLabel(methodInfo.Type)} ");
+            WriterBuilder.Append($"{GeneratorTools.GetTypeLabel(methodInfo.Type)} ");
             WriterBuilder.Append(methodInfo.Name);
 
             if (methodInfo.ParametersCollection != null)
@@ -192,7 +160,7 @@ namespace ScriptsGenerator.Core
                     WriterBuilder.Append(Constants.SPACE);
                 }
 
-                string parametersTypeLabel = GetReturnTypeLabel(parametersCollection[i].Type);
+                string parametersTypeLabel = GeneratorTools.GetTypeLabel(parametersCollection[i].Type);
                 WriterBuilder.Append($"{parametersTypeLabel} {parametersCollection[i].Name}");
 
                 if (i != parametersCollection.Count - 1)
@@ -226,34 +194,12 @@ namespace ScriptsGenerator.Core
             VariableInfo variable = property.Variable;
             string accessModifierLabel = Converters.ConvertEnumToLabel(property.Modifier);
 
-            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
+            WriterBuilder.Append($"{accessModifierLabel} {GeneratorTools.GetTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
 
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
                 WriterBuilder.Append($" = {variable.DefaultValue};");
             }
-        }
-
-        private void ExecuteWriteField(FieldInfo field)
-        {
-            VariableInfo variable = field.Variable;
-            string accessModifierLabel = Converters.ConvertEnumToLabel(field.Modifier);
-
-            WriterBuilder.Append($"{accessModifierLabel} {GetReturnTypeLabel(variable.Type)} {variable.Name}");
-
-            if (string.IsNullOrEmpty(variable.DefaultValue) == false)
-            {
-                WriterBuilder.Append($" = {variable.DefaultValue};");
-            }
-            else
-            {
-                WriterBuilder.Append(';');
-            }
-        }
-
-        private string GetReturnTypeLabel(Type returnType)
-        {
-            return BaseTypeDictionary.ContainsKey(returnType) == true ? BaseTypeDictionary[returnType] : returnType.Name.ToString();
         }
     }
 }

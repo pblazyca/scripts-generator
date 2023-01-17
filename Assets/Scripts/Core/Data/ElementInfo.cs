@@ -2,7 +2,7 @@ using System;
 
 namespace ScriptsGenerator.Structures
 {
-    public class ElementInfo : IName
+    public class ElementInfo : IName, IStructureElement
     {
         public string Name { get; private set; }
 

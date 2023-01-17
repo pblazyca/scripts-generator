@@ -5,6 +5,6 @@ namespace ScriptsGenerator.Core
 {
     public interface IWriter<T> where T : IStructureElement
     {
-        void Write(T structureElement, ref StringBuilder writerBuilder);
+        void Write(ref StringBuilder writerBuilder);
     }
 }

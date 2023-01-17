@@ -6,6 +6,13 @@ using Microsoft.CSharp;
 
 public static class GeneratorTools
 {
+    private static Dictionary<Type, string> BaseTypeDictionary { get; set; } = new();
+
+    static GeneratorTools()
+    {
+        BaseTypeDictionary = PopulateBaseTypeDictionary();
+    }
+
     public static Dictionary<Type, string> PopulateBaseTypeDictionary()
     {
         Assembly msCSharpLib = Assembly.GetAssembly(typeof(int));
@@ -29,5 +36,10 @@ public static class GeneratorTools
         }
 
         return baseTypeDictionary;
+    }
+
+    public static string GetTypeLabel(Type type)
+    {
+        return BaseTypeDictionary.ContainsKey(type) == true ? BaseTypeDictionary[type] : type.Name.ToString();
     }
 }

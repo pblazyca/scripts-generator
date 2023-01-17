@@ -8,13 +8,11 @@ namespace ScriptsGenerator.Core
 {
     public class ScriptGenerator : BaseGenerator
     {
-        private Dictionary<Type, string> BaseTypeDictionary { get; set; } = new();
         private StringBuilder WriterBuilder { get; set; }
 
         public ScriptGenerator(GeneratorSettings settings) : base(settings)
         {
             WriterBuilder = new StringBuilder();
-            BaseTypeDictionary = GeneratorTools.PopulateBaseTypeDictionary();
         }
 
         public void WriteUsing(UsingInfo namespaceInfo)
@@ -131,7 +129,7 @@ namespace ScriptsGenerator.Core
                 WriterBuilder.Append($"{Converters.ConvertEnumToLabel(methodInfo.Keyword)} ");
             }
 
-            WriterBuilder.Append($"{GetTypeLabel(methodInfo.Type)} ");
+            WriterBuilder.Append($"{GeneratorTools.GetTypeLabel(methodInfo.Type)} ");
             WriterBuilder.Append(methodInfo.Name);
 
             if (methodInfo.ParametersCollection != null)
@@ -163,7 +161,7 @@ namespace ScriptsGenerator.Core
                     WriterBuilder.Append(Constants.SPACE);
                 }
 
-                string parametersTypeLabel = GetTypeLabel(parametersCollection[i].Type);
+                string parametersTypeLabel = GeneratorTools.GetTypeLabel(parametersCollection[i].Type);
                 WriterBuilder.Append($"{parametersTypeLabel} {parametersCollection[i].Name}");
 
                 if (i != parametersCollection.Count - 1)
@@ -197,7 +195,7 @@ namespace ScriptsGenerator.Core
             VariableInfo variable = property.Variable;
             string accessModifierLabel = Converters.ConvertEnumToLabel(property.Modifier);
 
-            WriterBuilder.Append($"{accessModifierLabel} {GetTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
+            WriterBuilder.Append($"{accessModifierLabel} {GeneratorTools.GetTypeLabel(variable.Type)} {variable.Name} {{ get; set; }}");
 
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
@@ -210,7 +208,7 @@ namespace ScriptsGenerator.Core
             VariableInfo variable = field.Variable;
             string accessModifierLabel = Converters.ConvertEnumToLabel(field.Modifier);
 
-            WriterBuilder.Append($"{accessModifierLabel} {GetTypeLabel(variable.Type)} {variable.Name}");
+            WriterBuilder.Append($"{accessModifierLabel} {GeneratorTools.GetTypeLabel(variable.Type)} {variable.Name}");
 
             if (string.IsNullOrEmpty(variable.DefaultValue) == false)
             {
@@ -220,11 +218,6 @@ namespace ScriptsGenerator.Core
             {
                 WriterBuilder.Append(';');
             }
-        }
-
-        private string GetTypeLabel(Type type)
-        {
-            return BaseTypeDictionary.ContainsKey(type) == true ? BaseTypeDictionary[type] : type.Name.ToString();
         }
     }
 }

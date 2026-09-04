@@ -181,6 +181,33 @@ public sealed class RoslynCodeFormatterTests
     }
 
     [Fact]
+    public void GenerateClass_UsesSharedTypeFactoryForGenericAndArrayTypes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            fields: new[]
+            {
+                new RoslynField("List<string>", "_items"),
+                new RoslynField("int[]", "_values")
+            },
+            methods: new[]
+            {
+                new RoslynMethod(
+                    "Task<List<int>>",
+                    "Load",
+                    new[] { new RoslynParameter("CancellationToken", "cancellationToken") })
+            });
+
+        Assert.Contains("private List<string> _items;", result);
+        Assert.Contains("private int[] _values;", result);
+        Assert.Contains(
+            "public Task<List<int>> Load(CancellationToken cancellationToken)",
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
     public void GenerateClass_RejectsMissingNamespace()
     {
         Assert.Throws<ArgumentException>(

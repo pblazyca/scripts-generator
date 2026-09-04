@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ScriptsGenerator.Roslyn.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace ScriptsGenerator.Roslyn;
@@ -63,7 +64,7 @@ public sealed class RoslynSyntaxGenerator
         ArgumentException.ThrowIfNullOrWhiteSpace(field.Name);
 
         return FieldDeclaration(
-                VariableDeclaration(ParseTypeName(field.Type))
+                VariableDeclaration(RoslynTypeSyntaxFactory.Create(field.Type))
                     .AddVariables(VariableDeclarator(field.Name)))
             .AddModifiers(Token(SyntaxKind.PrivateKeyword));
     }
@@ -73,7 +74,7 @@ public sealed class RoslynSyntaxGenerator
         ArgumentException.ThrowIfNullOrWhiteSpace(property.Type);
         ArgumentException.ThrowIfNullOrWhiteSpace(property.Name);
 
-        return PropertyDeclaration(ParseTypeName(property.Type), property.Name)
+        return PropertyDeclaration(RoslynTypeSyntaxFactory.Create(property.Type), property.Name)
             .AddModifiers(Token(SyntaxKind.PublicKeyword))
             .WithAccessorList(AccessorList(
                 List(new[]
@@ -91,7 +92,7 @@ public sealed class RoslynSyntaxGenerator
         ArgumentException.ThrowIfNullOrWhiteSpace(method.Name);
 
         MethodDeclarationSyntax declaration = MethodDeclaration(
-                ParseTypeName(method.ReturnType),
+                RoslynTypeSyntaxFactory.Create(method.ReturnType),
                 method.Name)
             .AddModifiers(Token(SyntaxKind.PublicKeyword))
             .WithBody(Block());
@@ -111,6 +112,6 @@ public sealed class RoslynSyntaxGenerator
         ArgumentException.ThrowIfNullOrWhiteSpace(parameter.Name);
 
         return Parameter(Identifier(parameter.Name))
-            .WithType(ParseTypeName(parameter.Type));
+            .WithType(RoslynTypeSyntaxFactory.Create(parameter.Type));
     }
 }

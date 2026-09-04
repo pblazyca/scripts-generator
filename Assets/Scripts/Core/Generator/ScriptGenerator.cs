@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using ScriptsGenerator.Structures;
@@ -9,7 +10,7 @@ namespace ScriptsGenerator.Core
     {
         private StringBuilder WriterBuilder { get; set; }
 
-        public ScriptGenerator(GeneratorSettings settings) : base(settings)
+        public ScriptGenerator(GeneratorSettings settings, Func<string, string> codeFormatter = null) : base(settings, codeFormatter)
         {
             WriterBuilder = new StringBuilder();
         }
@@ -203,4 +204,3 @@ namespace ScriptsGenerator.Core
         }
     }
 }
-

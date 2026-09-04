@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
@@ -11,10 +12,19 @@ namespace ScriptsGenerator.Core
 
         private int IndentLevel { get; set; }
 
-        public BaseGenerator(GeneratorSettings settings)
+        private readonly Func<string, string> CodeFormatter;
+
+        public BaseGenerator(GeneratorSettings settings, Func<string, string> codeFormatter = null)
         {
             CodeBuilder = new StringBuilder();
             Settings = settings;
+            CodeFormatter = codeFormatter;
+        }
+
+        public string GetCode()
+        {
+            string code = CodeBuilder.ToString();
+            return CodeFormatter == null ? code : CodeFormatter(code);
         }
 
         public void BeginBlock()

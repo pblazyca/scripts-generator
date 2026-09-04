@@ -13,5 +13,8 @@ dotnet test Tools\ScriptsGenerator.Roslyn.Tests
 ```
 
 The formatter currently uses Roslyn's syntax tree and
-`NormalizeWhitespace()`. The Unity generator can be connected to this tool in
-a later step, after the formatting contract is covered by tests.
+`NormalizeWhitespace()`. The Unity generator exposes a formatter hook through the
+`ScriptGenerator(GeneratorSettings, Func<string, string>)` constructor. This
+keeps Roslyn outside the Unity runtime while allowing an integration layer to
+pass `RoslynCodeFormatter.Format` when both components run in the same .NET
+process.

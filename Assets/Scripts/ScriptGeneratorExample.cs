@@ -105,8 +105,9 @@ namespace ScriptsGenerator.Demo
 
         private void ShowGenerationResult()
         {
-            Debug.Log(Generator.CodeBuilder.ToString());
-            OutputLabel.text = Generator.CodeBuilder.ToString();
+            string generatedCode = Generator.GetCode();
+            Debug.Log(generatedCode);
+            OutputLabel.text = generatedCode;
         }
     }
 }

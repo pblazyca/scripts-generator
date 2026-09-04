@@ -1,4 +1,6 @@
 using ScriptsGenerator.Roslyn;
+using ScriptsGenerator.Roslyn.Adapters;
+using System.Text.Json;
 using Xunit;
 
 namespace ScriptsGenerator.Roslyn.Tests;
@@ -219,5 +221,37 @@ public sealed class RoslynCodeFormatterTests
     {
         Assert.Throws<ArgumentException>(
             () => syntaxGenerator.GenerateClass("Generated", string.Empty));
+    }
+
+    [Fact]
+    public void GenerationRequestAdapter_GeneratesFromJsonContract()
+    {
+        const string json = """
+            {
+              "namespace": "Generated",
+              "className": "Example",
+              "usings": [ "System" ],
+              "fields": [ { "type": "int", "name": "_count" } ],
+              "properties": [ { "type": "string", "name": "Name" } ],
+              "methods": [
+                {
+                  "returnType": "void",
+                  "name": "Run",
+                  "parameters": [ { "type": "int", "name": "count" } ]
+                }
+              ]
+            }
+            """;
+
+        GenerationRequest request = JsonSerializer.Deserialize<GenerationRequest>(
+            json,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        string result = GenerationRequestAdapter.Generate(request);
+
+        Assert.Contains("using System;", result);
+        Assert.Contains("private int _count;", result);
+        Assert.Contains("public string Name { get; set; }", result);
+        Assert.Contains("public void Run(int count)", result);
+        Assert.Empty(formatter.Validate(result));
     }
 }

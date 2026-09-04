@@ -127,6 +127,50 @@ public sealed class RoslynCodeFormatterTests
     }
 
     [Fact]
+    public void GenerateClass_AddsMethodAndParametersThroughSyntaxNodes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            methods: new[]
+            {
+                new RoslynMethod(
+                    "void",
+                    "Run",
+                    new[]
+                    {
+                        new RoslynParameter("int", "count"),
+                        new RoslynParameter("string", "label")
+                    })
+            });
+
+        Assert.Equal(
+            """
+            namespace Generated
+            {
+                public class Example
+                {
+                    public void Run(int count, string label)
+                    {
+                    }
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsInvalidMethodReturnType()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            syntaxGenerator.GenerateClass(
+                "Generated",
+                "Example",
+                methods: new[] { new RoslynMethod(string.Empty, "Run") }));
+    }
+
+    [Fact]
     public void GenerateClass_RejectsInvalidFieldType()
     {
         Assert.Throws<ArgumentException>(() =>

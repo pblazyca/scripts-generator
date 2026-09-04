@@ -19,6 +19,15 @@ keeps Roslyn outside the Unity runtime while allowing an integration layer to
 pass `RoslynCodeFormatter.Format` when both components run in the same .NET
 process.
 
+The generated result can be written directly to a C# file:
+
+```csharp
+generator.SaveToFile("Generated/Example.cs");
+```
+
+`SaveToFile` uses `GetCode()`, so an injected formatter runs before the file is
+written and missing directories are created automatically.
+
 In the Unity Editor, select a `.cs` asset and use
 `Scripts Generator/Roslyn/Format Selected C# File` or
 `Scripts Generator/Roslyn/Validate Selected C# File`. The menu invokes the

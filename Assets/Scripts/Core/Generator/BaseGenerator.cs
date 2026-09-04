@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using CodeHappiness.Core;
 
@@ -25,6 +26,19 @@ namespace ScriptsGenerator.Core
         {
             string code = CodeBuilder.ToString();
             return CodeFormatter == null ? code : CodeFormatter(code);
+        }
+
+        public void SaveToFile(string filePath)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+
+            string directoryPath = Path.GetDirectoryName(filePath);
+            if (string.IsNullOrEmpty(directoryPath) == false)
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            File.WriteAllText(filePath, GetCode(), Encoding.UTF8);
         }
 
         public void BeginBlock()

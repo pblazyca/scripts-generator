@@ -30,7 +30,10 @@ namespace ScriptsGenerator.Core
 
         public void SaveToFile(string filePath)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("File path cannot be empty.", nameof(filePath));
+            }
 
             string directoryPath = Path.GetDirectoryName(filePath);
             if (string.IsNullOrEmpty(directoryPath) == false)

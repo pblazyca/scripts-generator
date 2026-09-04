@@ -18,3 +18,9 @@ The formatter currently uses Roslyn's syntax tree and
 keeps Roslyn outside the Unity runtime while allowing an integration layer to
 pass `RoslynCodeFormatter.Format` when both components run in the same .NET
 process.
+
+In the Unity Editor, select a `.cs` asset and use
+`Scripts Generator/Roslyn/Format Selected C# File` or
+`Scripts Generator/Roslyn/Validate Selected C# File`. The menu invokes the
+isolated CLI through `dotnet`, so the Roslyn assemblies are not loaded by
+Unity.

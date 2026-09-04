@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.IO;
+using System.Text;
 using CodeHappiness.Core;
 
 namespace ScriptsGenerator.Core
@@ -11,10 +13,35 @@ namespace ScriptsGenerator.Core
 
         private int IndentLevel { get; set; }
 
-        public BaseGenerator(GeneratorSettings settings)
+        private readonly Func<string, string> CodeFormatter;
+
+        public BaseGenerator(GeneratorSettings settings, Func<string, string> codeFormatter = null)
         {
             CodeBuilder = new StringBuilder();
             Settings = settings;
+            CodeFormatter = codeFormatter;
+        }
+
+        public string GetCode()
+        {
+            string code = CodeBuilder.ToString();
+            return CodeFormatter == null ? code : CodeFormatter(code);
+        }
+
+        public void SaveToFile(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("File path cannot be empty.", nameof(filePath));
+            }
+
+            string directoryPath = Path.GetDirectoryName(filePath);
+            if (string.IsNullOrEmpty(directoryPath) == false)
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            File.WriteAllText(filePath, GetCode(), Encoding.UTF8);
         }
 
         public void BeginBlock()
@@ -56,7 +83,7 @@ namespace ScriptsGenerator.Core
                     break;
 
                 case IndentStyle.SPACE:
-                    WriteSpace(IndentLevel);
+                    WriteSpace(IndentLevel * Settings.IndentSize);
                     break;
             }
         }

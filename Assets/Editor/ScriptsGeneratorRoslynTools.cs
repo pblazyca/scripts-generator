@@ -63,7 +63,7 @@ public static class ScriptsGeneratorRoslynTools
     {
         string projectRoot = Directory.GetParent(Application.dataPath).FullName;
         string toolProjectPath = Path.Combine(projectRoot, ToolProjectPath);
-        string arguments = $"run --project \"{toolProjectPath}\" --no-restore -- {command} \"{inputPath}\"";
+        string arguments = $"run --project \"{toolProjectPath}\" -- {command} \"{inputPath}\"";
 
         if (outputPath != null)
         {

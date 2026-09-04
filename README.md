@@ -9,6 +9,7 @@ adding Roslyn Workspaces to the Unity runtime.
 ```powershell
 dotnet run --project Tools\ScriptsGenerator.Roslyn -- format input.cs output.cs
 dotnet run --project Tools\ScriptsGenerator.Roslyn -- validate output.cs
+dotnet run --project Tools\ScriptsGenerator.Roslyn -- generate request.json output.cs
 dotnet test Tools\ScriptsGenerator.Roslyn.Tests
 ```
 
@@ -18,6 +19,23 @@ The formatter currently uses Roslyn's syntax tree and
 keeps Roslyn outside the Unity runtime while allowing an integration layer to
 pass `RoslynCodeFormatter.Format` when both components run in the same .NET
 process.
+
+The `generate` command accepts a JSON contract:
+
+```json
+{
+  "namespace": "Generated",
+  "className": "Example",
+  "usings": ["System"],
+  "fields": [{ "type": "int", "name": "_count" }],
+  "properties": [{ "type": "string", "name": "Name" }],
+  "methods": [{
+    "returnType": "void",
+    "name": "Run",
+    "parameters": [{ "type": "int", "name": "count" }]
+  }]
+}
+```
 
 The generated result can be written directly to a C# file:
 

@@ -1,4 +1,6 @@
 using ScriptsGenerator.Roslyn;
+using ScriptsGenerator.Roslyn.Adapters;
+using System.Text.Json;
 using Xunit;
 
 namespace ScriptsGenerator.Roslyn.Tests;
@@ -6,6 +8,7 @@ namespace ScriptsGenerator.Roslyn.Tests;
 public sealed class RoslynCodeFormatterTests
 {
     private readonly RoslynCodeFormatter formatter = new();
+    private readonly RoslynSyntaxGenerator syntaxGenerator = new();
 
     [Fact]
     public void Format_ProducesNormalizedCSharp()
@@ -75,5 +78,180 @@ public sealed class RoslynCodeFormatterTests
     public void Validate_RejectsNullSource()
     {
         Assert.Throws<ArgumentNullException>(() => formatter.Validate(null!));
+    }
+
+    [Fact]
+    public void GenerateClass_UsesSyntaxTreeForUsingsNamespaceAndClass()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            new[] { "System", "System.Collections.Generic" });
+
+        Assert.Equal(
+            """
+            using System;
+            using System.Collections.Generic;
+
+            namespace Generated
+            {
+                public class Example
+                {
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_AddsFieldsAndPropertiesThroughSyntaxNodes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            fields: new[] { new RoslynField("int", "_count") },
+            properties: new[] { new RoslynProperty("string", "Name") });
+
+        Assert.Equal(
+            """
+            namespace Generated
+            {
+                public class Example
+                {
+                    private int _count;
+                    public string Name { get; set; }
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_AddsMethodAndParametersThroughSyntaxNodes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            methods: new[]
+            {
+                new RoslynMethod(
+                    "void",
+                    "Run",
+                    new[]
+                    {
+                        new RoslynParameter("int", "count"),
+                        new RoslynParameter("string", "label")
+                    })
+            });
+
+        Assert.Equal(
+            """
+            namespace Generated
+            {
+                public class Example
+                {
+                    public void Run(int count, string label)
+                    {
+                    }
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsInvalidMethodReturnType()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            syntaxGenerator.GenerateClass(
+                "Generated",
+                "Example",
+                methods: new[] { new RoslynMethod(string.Empty, "Run") }));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsInvalidFieldType()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            syntaxGenerator.GenerateClass(
+                "Generated",
+                "Example",
+                fields: new[] { new RoslynField(string.Empty, "_count") }));
+    }
+
+    [Fact]
+    public void GenerateClass_UsesSharedTypeFactoryForGenericAndArrayTypes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            fields: new[]
+            {
+                new RoslynField("List<string>", "_items"),
+                new RoslynField("int[]", "_values")
+            },
+            methods: new[]
+            {
+                new RoslynMethod(
+                    "Task<List<int>>",
+                    "Load",
+                    new[] { new RoslynParameter("CancellationToken", "cancellationToken") })
+            });
+
+        Assert.Contains("private List<string> _items;", result);
+        Assert.Contains("private int[] _values;", result);
+        Assert.Contains(
+            "public Task<List<int>> Load(CancellationToken cancellationToken)",
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsMissingNamespace()
+    {
+        Assert.Throws<ArgumentException>(
+            () => syntaxGenerator.GenerateClass(string.Empty, "Example"));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsMissingClassName()
+    {
+        Assert.Throws<ArgumentException>(
+            () => syntaxGenerator.GenerateClass("Generated", string.Empty));
+    }
+
+    [Fact]
+    public void GenerationRequestAdapter_GeneratesFromJsonContract()
+    {
+        const string json = """
+            {
+              "namespace": "Generated",
+              "className": "Example",
+              "usings": [ "System" ],
+              "fields": [ { "type": "int", "name": "_count" } ],
+              "properties": [ { "type": "string", "name": "Name" } ],
+              "methods": [
+                {
+                  "returnType": "void",
+                  "name": "Run",
+                  "parameters": [ { "type": "int", "name": "count" } ]
+                }
+              ]
+            }
+            """;
+
+        GenerationRequest request = JsonSerializer.Deserialize<GenerationRequest>(
+            json,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        string result = GenerationRequestAdapter.Generate(request);
+
+        Assert.Contains("using System;", result);
+        Assert.Contains("private int _count;", result);
+        Assert.Contains("public string Name { get; set; }", result);
+        Assert.Contains("public void Run(int count)", result);
+        Assert.Empty(formatter.Validate(result));
     }
 }

@@ -1,4 +1,6 @@
 using ScriptsGenerator.Roslyn;
+using ScriptsGenerator.Roslyn.Adapters;
+using System.Text.Json;
 
 if (args.Length is < 2 or > 3)
 {
@@ -36,6 +38,19 @@ switch (command)
 
         return diagnostics.Count == 0 ? 0 : 1;
 
+    case "generate":
+        GenerationRequest? request = JsonSerializer.Deserialize<GenerationRequest>(
+            source,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (request == null)
+        {
+            Console.Error.WriteLine("Generation request cannot be empty.");
+            return 1;
+        }
+
+        File.WriteAllText(outputPath, GenerationRequestAdapter.Generate(request));
+        return 0;
+
     default:
         PrintUsage();
         return 2;
@@ -46,4 +61,5 @@ static void PrintUsage()
     Console.Error.WriteLine("Usage:");
     Console.Error.WriteLine("  dotnet run -- format <input.cs> [output.cs]");
     Console.Error.WriteLine("  dotnet run -- validate <input.cs>");
+    Console.Error.WriteLine("  dotnet run -- generate <request.json> [output.cs]");
 }

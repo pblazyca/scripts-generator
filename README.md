@@ -9,6 +9,7 @@ adding Roslyn Workspaces to the Unity runtime.
 ```powershell
 dotnet run --project Tools\ScriptsGenerator.Roslyn -- format input.cs output.cs
 dotnet run --project Tools\ScriptsGenerator.Roslyn -- validate output.cs
+dotnet test Tools\ScriptsGenerator.Roslyn.Tests
 ```
 
 The formatter currently uses Roslyn's syntax tree and

@@ -6,6 +6,7 @@ namespace ScriptsGenerator.Roslyn.Tests;
 public sealed class RoslynCodeFormatterTests
 {
     private readonly RoslynCodeFormatter formatter = new();
+    private readonly RoslynSyntaxGenerator syntaxGenerator = new();
 
     [Fact]
     public void Format_ProducesNormalizedCSharp()
@@ -75,5 +76,43 @@ public sealed class RoslynCodeFormatterTests
     public void Validate_RejectsNullSource()
     {
         Assert.Throws<ArgumentNullException>(() => formatter.Validate(null!));
+    }
+
+    [Fact]
+    public void GenerateClass_UsesSyntaxTreeForUsingsNamespaceAndClass()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            new[] { "System", "System.Collections.Generic" });
+
+        Assert.Equal(
+            """
+            using System;
+            using System.Collections.Generic;
+
+            namespace Generated
+            {
+                public class Example
+                {
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsMissingNamespace()
+    {
+        Assert.Throws<ArgumentException>(
+            () => syntaxGenerator.GenerateClass(string.Empty, "Example"));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsMissingClassName()
+    {
+        Assert.Throws<ArgumentException>(
+            () => syntaxGenerator.GenerateClass("Generated", string.Empty));
     }
 }

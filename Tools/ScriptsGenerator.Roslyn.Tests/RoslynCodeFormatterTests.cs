@@ -103,6 +103,40 @@ public sealed class RoslynCodeFormatterTests
     }
 
     [Fact]
+    public void GenerateClass_AddsFieldsAndPropertiesThroughSyntaxNodes()
+    {
+        string result = syntaxGenerator.GenerateClass(
+            "Generated",
+            "Example",
+            fields: new[] { new RoslynField("int", "_count") },
+            properties: new[] { new RoslynProperty("string", "Name") });
+
+        Assert.Equal(
+            """
+            namespace Generated
+            {
+                public class Example
+                {
+                    private int _count;
+                    public string Name { get; set; }
+                }
+            }
+            """,
+            result);
+        Assert.Empty(formatter.Validate(result));
+    }
+
+    [Fact]
+    public void GenerateClass_RejectsInvalidFieldType()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            syntaxGenerator.GenerateClass(
+                "Generated",
+                "Example",
+                fields: new[] { new RoslynField(string.Empty, "_count") }));
+    }
+
+    [Fact]
     public void GenerateClass_RejectsMissingNamespace()
     {
         Assert.Throws<ArgumentException>(

@@ -80,7 +80,7 @@ namespace ScriptsGenerator.Core
                     break;
 
                 case IndentStyle.SPACE:
-                    WriteSpace(IndentLevel);
+                    WriteSpace(IndentLevel * Settings.IndentSize);
                     break;
             }
         }

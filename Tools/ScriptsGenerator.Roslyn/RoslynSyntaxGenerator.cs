@@ -5,17 +5,6 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace ScriptsGenerator.Roslyn;
 
-public sealed record RoslynField(string Type, string Name);
-
-public sealed record RoslynProperty(string Type, string Name);
-
-public sealed record RoslynParameter(string Type, string Name);
-
-public sealed record RoslynMethod(
-    string ReturnType,
-    string Name,
-    IEnumerable<RoslynParameter>? Parameters = null);
-
 public sealed class RoslynSyntaxGenerator
 {
     public string GenerateClass(
